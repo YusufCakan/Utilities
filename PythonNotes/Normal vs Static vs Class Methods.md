@@ -26,9 +26,19 @@ An example is the str.maketrans static method, moved from the string module in P
 
 In python 2, you have to import this function from the increasingly deprecated string module:
 
-      import string
+      import string 
       'ABCDEFG'.translate(string.maketrans('ABC', 'abc'))
        'abcDEFG'
+       
+#### Summary
+      1. Static methods are simply functions. They do not have their first argument as self.
+      1. We can acess static methods without initialising the object. Therefore the class that it is held within becomes just             a namespace. We do not need to create on object first in order to access its methods.
+      2. Static members cannot call self method but can call other static methods and class methods.
+      3. Static methods belong to a class and not to the object at all. It works on class attributes and not on instance attributes.
+      5.  Static methoids  can be called by both class and instances
+      6.  Main Benefits is that it localises function name in the class scope. Sort of allowing functional programming pradigm.
+      7. Second benefit is that it moves code closer to where it will be used.
+
 
 ### Class Method
 
@@ -47,3 +57,17 @@ When we subclass dict, we can use the same constructor, which creates an instanc
     {'a': None, 'c': None, 'b': None}
     type(md)
     <class '__main__.MyDict'>
+
+
+#### Summary
+            1. To decide whether to use @staticmethod or @classmethod you have to look inside your method. If your method accesses other variables/methods in your class then use @classmethod.
+            2.Class methods are not bound to the object but to the class.
+            3. They can be called without instiating the class.
+            4. Its first argument must be a class. This means you can use the class and its properties inside that method rather than a particular instance.
+            5. It is useful for:
+                  * Factory methods, that are used to create an instance for a class using for example some sort of pre-processing.
+                  * Static methods calling static methods: if you split a static methods in several static methods, you shouldn't hard-code the class name but use class methods
+            
+            
+            
+            
