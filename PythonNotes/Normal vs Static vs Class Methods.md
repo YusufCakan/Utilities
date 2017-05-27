@@ -60,13 +60,17 @@ When we subclass dict, we can use the same constructor, which creates an instanc
 
 
 #### Summary
-            1. To decide whether to use @staticmethod or @classmethod you have to look inside your method. If your method accesses other variables/methods in your class then use @classmethod.
-            2.Class methods are not bound to the object but to the class.
+            1. To decide whether to use @staticmethod or @classmethod you have to look inside your method. If your method
+            accesses other variables/methods in your class then use @classmethod.
+            2. Class methods are not bound to the object but to the class.
             3. They can be called without instiating the class.
-            4. Its first argument must be a class. This means you can use the class and its properties inside that method rather than a particular instance.
+            4. Its first argument must be a class. This means you can use the class and its properties inside that method
+            rather than a particular instance.
             5. It is useful for:
-                  * Factory methods, that are used to create an instance for a class using for example some sort of pre-processing.
-                  * Static methods calling static methods: if you split a static methods in several static methods, you shouldn't hard-code the class name but use class methods
+                  * Factory methods, that are used to create an instance for a class using for example some sort of
+                  pre-processing.
+                  * Static methods calling static methods: if you split a static methods in several static methods, you
+                  shouldn't hard-code the class name but use class methods
             
             
             
