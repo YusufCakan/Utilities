@@ -27,12 +27,12 @@ So, for all intents and purposes, super is a shortcut to access a base class wit
 In Python 3 and above, the syntax for super is:
 
 
-super().methoName(args)
+     super().methoName(args)
 
 Whereas the normal way to call super (in older builds of Python) is:
 
 
-super(subClass, instance).method(args)
+    super(subClass, instance).method(args)
 
 As you can see, the newer version of Python makes the syntax a little simpler.
 
