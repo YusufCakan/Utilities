@@ -1,4 +1,4 @@
-# Working with the Python Super Function
+### Working with the Python Super Function
 Python 2.2 saw the introduction of a built-in function called “super,” which returns a proxy object to delegate method calls to a class – which can be either parent or sibling in nature.
 
 That description may not make sense unless you have experience working with Python, so we’ll break it down.
@@ -11,7 +11,7 @@ Or, as the official Python documentation says:
 *“Super is used to] return a proxy object that delegates method calls to a parent or sibling class of type. This is useful for accessing inherited methods that have been overridden in a class. The search order is same as that used by getattr() except that the type itself is skipped.”*
 
 
-### How Is the Super Function Used?
+#### How Is the Super Function Used?
 The super function is somewhat versatile, and can be used in a couple of ways.
 
 **Use Case 1:** Super can be called upon in a single inheritance, in order to refer to the parent class or multiple classes without explicitly naming them. It’s somewhat of a shortcut, but more importantly, it helps keep your code maintainable for the foreseeable future.
@@ -91,7 +91,7 @@ It will look like the following:
  
 Again, this process is much more straightforward than the traditional method. In this case, we had to call the super function’s __init__ method to pass our arguments.
 
-### What Is the Super Function for Again?
+#### What Is the Super Function for Again?
 The super function is extremely useful when you’re concerned about forward compatibility. By adding it to your code, you can ensure that your work will stay operational into the future with only a few changes across the board.
 
 Ultimately, it eliminates the need to declare certain characteristics of a class, provided you use it correctly.
