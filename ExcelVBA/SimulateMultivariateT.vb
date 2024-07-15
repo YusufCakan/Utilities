@@ -136,6 +136,7 @@ Function SampleMultiVariateNormal(CorrelationMatrixRange As Range) As Variant
     SampleMultiVariateNormal = Result
 End Function
 
+' Note need to select as many rows as there are variables to simulate
 
 Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFreedom As Double) As Variant
     'read in the correlation matrix
@@ -144,7 +145,7 @@ Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFre
     'check that we have a valid correlation matrix
     If CheckCorrelationMatrix(CorrelationMatrix) = False Then
         MsgBox ("The correlation matrix isn't symmetrical.")
-        SampleMultiVariateNormal = CVErr(xlErrValue)
+        'SampleMultiVariateNormal = CVErr(xlErrValue)
         Exit Function
     End If
     'use cholesky matrix to get A such that AA' = CorrelationMatrix
@@ -156,19 +157,20 @@ Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFre
     Dim Result() As Variant
     With Application.Caller
         CallerRows = .Rows.Count
-        CallerCols = .Columns.Count
+        CallerCols = UBound(CorrelationMatrix, 1) '.Columns.Count
     End With
     ReDim Result(CallerRows, CallerCols)
     'loop through the columns and generate the random samples
     Dim i As Integer
     Dim j As Integer
     Dim X() As Variant
-    ChiSquare = WorksheetFunction.ChiInv(Rnd, DegreesOfFreedom)
+    Dim ChiSquare As Double
+    ChiSquare = WorksheetFunction.ChiInv(Rnd(), DegreesOfFreedom)
     For i = 1 To CallerRows
-        X = SampleSingleMultiVariateNormal(A) / Sqr(ChiSquare / DegreesOfFreedom)
+        X = SampleSingleMultiVariateNormal(A) 
         For j = 1 To CallerCols
             If j <= UBound(X) Then
-                Result(i, j) = X(j)
+                Result(i, j) = X(j) / Sqr(ChiSquare / DegreesOfFreedom)
             Else
                 Result(i, j) = ""
             End If
@@ -176,4 +178,3 @@ Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFre
     Next i
     SampleMultivariateNormalT = Result
 End Function
-
