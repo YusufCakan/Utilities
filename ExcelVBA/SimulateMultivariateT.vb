@@ -165,9 +165,9 @@ Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFre
     Dim j As Integer
     Dim X() As Variant
     Dim ChiSquare As Double
-    ChiSquare = WorksheetFunction.ChiInv(Rnd(), DegreesOfFreedom)
     For i = 1 To CallerRows
         X = SampleSingleMultiVariateNormal(A) 
+        ChiSquare = WorksheetFunction.ChiInv(Rnd(), DegreesOfFreedom)
         For j = 1 To CallerCols
             If j <= UBound(X) Then
                 Result(i, j) = X(j) / Sqr(ChiSquare / DegreesOfFreedom)
