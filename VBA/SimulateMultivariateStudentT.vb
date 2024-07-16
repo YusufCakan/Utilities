@@ -138,7 +138,7 @@ End Function
 
 ' Note need to select as many rows as there are variables to simulate
 
-Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFreedom As Double) As Variant
+Function SampleMultivariateStudentT(CorrelationMatrixRange As Range, DegreesOfFreedom As Double) As Variant
     'read in the correlation matrix
     Dim CorrelationMatrix() As Variant
     CorrelationMatrix = CorrelationMatrixRange
@@ -181,7 +181,6 @@ Function SampleMultivariateNormalT(CorrelationMatrixRange As Range, DegreesOfFre
     Next i
     SampleMultivariateNormalT = Result
 End Function
-
 
 
 Public Function arrayrank(vArray() As Double) As Long()
@@ -367,218 +366,217 @@ Public Function quicksort(keyArray() As Double, Optional Column As Long, Optiona
 
 End Function
 
-
 Private Function quick_sort_1ds(inLow, inHi, keyArray)
 
-' Usage: quicksort(inLow, inHi, keyArray)
-'
-' "quick_sort_1ds" = quick sort one dimensional single array
-'
-' Sorts keyArray in place between indices inLow and inHi, keyArray must be of
-' type Double
-'
-' This function is based on code suggested in:
-' http://stackoverflow.com/questions/152319/vba-array-sort-function
+    ' Usage: quicksort(inLow, inHi, keyArray)
+    '
+    ' "quick_sort_1ds" = quick sort one dimensional single array
+    '
+    ' Sorts keyArray in place between indices inLow and inHi, keyArray must be of
+    ' type Double
+    '
+    ' This function is based on code suggested in:
+    ' http://stackoverflow.com/questions/152319/vba-array-sort-function
 
-Dim tmpLow As Long
-Dim tmpHi As Long
-Dim pivot As Double
-Dim keyTmpSwap As Double
+    Dim tmpLow As Long
+    Dim tmpHi As Long
+    Dim pivot As Double
+    Dim keyTmpSwap As Double
 
-tmpLow = inLow
-tmpHi = inHi
-pivot = keyArray((inLow + inHi) \ 2)
+    tmpLow = inLow
+    tmpHi = inHi
+    pivot = keyArray((inLow + inHi) \ 2)
 
-Do While (tmpLow <= tmpHi)
-    Do While keyArray(tmpLow) < pivot And tmpLow < inHi
-        tmpLow = tmpLow + 1
+    Do While (tmpLow <= tmpHi)
+        Do While keyArray(tmpLow) < pivot And tmpLow < inHi
+            tmpLow = tmpLow + 1
+        Loop
+        Do While keyArray(tmpHi) > pivot And tmpHi > inLow
+            tmpHi = tmpHi - 1
+        Loop
+        If (tmpLow <= tmpHi) Then
+            keyTmpSwap = keyArray(tmpLow)
+            keyArray(tmpLow) = keyArray(tmpHi)
+            keyArray(tmpHi) = keyTmpSwap
+            tmpLow = tmpLow + 1
+            tmpHi = tmpHi - 1
+        End If
     Loop
-    Do While keyArray(tmpHi) > pivot And tmpHi > inLow
-        tmpHi = tmpHi - 1
-    Loop
-    If (tmpLow <= tmpHi) Then
-        keyTmpSwap = keyArray(tmpLow)
-        keyArray(tmpLow) = keyArray(tmpHi)
-        keyArray(tmpHi) = keyTmpSwap
-        tmpLow = tmpLow + 1
-        tmpHi = tmpHi - 1
-    End If
-Loop
 
-If (inLow < tmpHi) Then quick_sort_1ds inLow, tmpHi, keyArray
-If (tmpLow < inHi) Then quick_sort_1ds tmpLow, inHi, keyArray
+    If (inLow < tmpHi) Then quick_sort_1ds inLow, tmpHi, keyArray
+    If (tmpLow < inHi) Then quick_sort_1ds tmpLow, inHi, keyArray
 
 End Function
 
 Private Function quick_sort_1dd(inLow, inHi, keyArray, otherArray)
 
-' Usage: quick_sort_1dd(inLow, inHi, keyArray, otherArray)
-'
-' "quick_sort_1dd" = quick sort one dimensional double array
-'
-' Sorts keyArray in place between indices inLow and inHi.
-'
-' An array, "otherArray" is sorted in parallel, also in-place. "otherArray" must
-' be one dimensional and have the same start and end indices as the first dimen-
-' sion of "keyArray".
-'
-' "keyArray" must be of type Double, "otherArray" must be of type long.
-'
-' This function is based on code suggested in:
-' http://stackoverflow.com/questions/152319/vba-array-sort-function
+    ' Usage: quick_sort_1dd(inLow, inHi, keyArray, otherArray)
+    '
+    ' "quick_sort_1dd" = quick sort one dimensional double array
+    '
+    ' Sorts keyArray in place between indices inLow and inHi.
+    '
+    ' An array, "otherArray" is sorted in parallel, also in-place. "otherArray" must
+    ' be one dimensional and have the same start and end indices as the first dimen-
+    ' sion of "keyArray".
+    '
+    ' "keyArray" must be of type Double, "otherArray" must be of type long.
+    '
+    ' This function is based on code suggested in:
+    ' http://stackoverflow.com/questions/152319/vba-array-sort-function
 
-Dim pivot As Double
-Dim tmpLow As Long
-Dim tmpHi As Long
-Dim keyTmpSwap As Double
-Dim otherTmpSwap As Long
-Dim keyDims As Long
-Dim otherDims As Long
+    Dim pivot As Double
+    Dim tmpLow As Long
+    Dim tmpHi As Long
+    Dim keyTmpSwap As Double
+    Dim otherTmpSwap As Long
+    Dim keyDims As Long
+    Dim otherDims As Long
 
-tmpLow = inLow
-tmpHi = inHi
-pivot = keyArray((inLow + inHi) \ 2)
+    tmpLow = inLow
+    tmpHi = inHi
+    pivot = keyArray((inLow + inHi) \ 2)
 
-Do While (tmpLow <= tmpHi)
+    Do While (tmpLow <= tmpHi)
 
-    Do While keyArray(tmpLow) < pivot And tmpLow < inHi
-        tmpLow = tmpLow + 1
+        Do While keyArray(tmpLow) < pivot And tmpLow < inHi
+            tmpLow = tmpLow + 1
+        Loop
+        
+        Do While keyArray(tmpHi) > pivot And tmpHi > inLow
+            tmpHi = tmpHi - 1
+        Loop
+        
+        If (tmpLow <= tmpHi) Then
+        
+            keyTmpSwap = keyArray(tmpLow)
+            otherTmpSwap = otherArray(tmpLow)
+            
+            keyArray(tmpLow) = keyArray(tmpHi)
+            otherArray(tmpLow) = otherArray(tmpHi)
+            
+            keyArray(tmpHi) = keyTmpSwap
+            otherArray(tmpHi) = otherTmpSwap
+            
+            tmpLow = tmpLow + 1
+            tmpHi = tmpHi - 1
+            
+        End If
+        
     Loop
-    
-    Do While keyArray(tmpHi) > pivot And tmpHi > inLow
-        tmpHi = tmpHi - 1
-    Loop
-    
-    If (tmpLow <= tmpHi) Then
-    
-        keyTmpSwap = keyArray(tmpLow)
-        otherTmpSwap = otherArray(tmpLow)
-        
-        keyArray(tmpLow) = keyArray(tmpHi)
-        otherArray(tmpLow) = otherArray(tmpHi)
-        
-        keyArray(tmpHi) = keyTmpSwap
-        otherArray(tmpHi) = otherTmpSwap
-        
-        tmpLow = tmpLow + 1
-        tmpHi = tmpHi - 1
-        
-    End If
-    
-Loop
 
-If (inLow < tmpHi) Then quick_sort_1dd inLow, tmpHi, keyArray, otherArray
-If (tmpLow < inHi) Then quick_sort_1dd tmpLow, inHi, keyArray, otherArray
+    If (inLow < tmpHi) Then quick_sort_1dd inLow, tmpHi, keyArray, otherArray
+    If (tmpLow < inHi) Then quick_sort_1dd tmpLow, inHi, keyArray, otherArray
 
 End Function
 
 Private Function quick_sort_2ds(inLow As Long, inHi As Long, keyArray() As Double, Column As Long)
 
-' Usage: quick_sort_2ds(inLow, inHi, keyArray, column)
-'
-' "quick_sort_2ds" = quick sort two dimensional single array
-'
-' Sorts a column of "keyArray", in place ' between indices "inLow" and "inHi".
-' "keyArray" must be is two-dimensional (i.e. a matrix). Only the column
-' specified by the optional argument "column" will be sorted, the other columns
-' are left untouched.
-'
-' "keyArray" must be of type Double, column and "column" must be of type
-' long
-'
-' This function is based on code suggested in:
-' http://stackoverflow.com/questions/152319/vba-array-sort-function
+    ' Usage: quick_sort_2ds(inLow, inHi, keyArray, column)
+    '
+    ' "quick_sort_2ds" = quick sort two dimensional single array
+    '
+    ' Sorts a column of "keyArray", in place ' between indices "inLow" and "inHi".
+    ' "keyArray" must be is two-dimensional (i.e. a matrix). Only the column
+    ' specified by the optional argument "column" will be sorted, the other columns
+    ' are left untouched.
+    '
+    ' "keyArray" must be of type Double, column and "column" must be of type
+    ' long
+    '
+    ' This function is based on code suggested in:
+    ' http://stackoverflow.com/questions/152319/vba-array-sort-function
 
-Dim pivot As Double
-Dim tmpLow As Long
-Dim tmpHi As Long
-Dim keyTmpSwap As Double
-Dim keyDims As Long
+    Dim pivot As Double
+    Dim tmpLow As Long
+    Dim tmpHi As Long
+    Dim keyTmpSwap As Double
+    Dim keyDims As Long
 
-tmpLow = inLow
-tmpHi = inHi
-pivot = keyArray((inLow + inHi) \ 2, Column)
+    tmpLow = inLow
+    tmpHi = inHi
+    pivot = keyArray((inLow + inHi) \ 2, Column)
 
-Do While (tmpLow <= tmpHi)
-    Do While keyArray(tmpLow, Column) < pivot And tmpLow < inHi
-        tmpLow = tmpLow + 1
+    Do While (tmpLow <= tmpHi)
+        Do While keyArray(tmpLow, Column) < pivot And tmpLow < inHi
+            tmpLow = tmpLow + 1
+        Loop
+        Do While keyArray(tmpHi, Column) > pivot And tmpHi > inLow
+            tmpHi = tmpHi - 1
+        Loop
+        If (tmpLow <= tmpHi) Then
+            keyTmpSwap = keyArray(tmpLow, Column)
+            keyArray(tmpLow, Column) = keyArray(tmpHi, Column)
+            keyArray(tmpHi, Column) = keyTmpSwap
+            tmpLow = tmpLow + 1
+            tmpHi = tmpHi - 1
+        End If
     Loop
-    Do While keyArray(tmpHi, Column) > pivot And tmpHi > inLow
-        tmpHi = tmpHi - 1
-    Loop
-    If (tmpLow <= tmpHi) Then
-        keyTmpSwap = keyArray(tmpLow, Column)
-        keyArray(tmpLow, Column) = keyArray(tmpHi, Column)
-        keyArray(tmpHi, Column) = keyTmpSwap
-        tmpLow = tmpLow + 1
-        tmpHi = tmpHi - 1
-    End If
-Loop
 
-If (inLow < tmpHi) Then quick_sort_2ds inLow, tmpHi, keyArray, Column
-If (tmpLow < inHi) Then quick_sort_2ds tmpLow, inHi, keyArray, Column
+    If (inLow < tmpHi) Then quick_sort_2ds inLow, tmpHi, keyArray, Column
+    If (tmpLow < inHi) Then quick_sort_2ds tmpLow, inHi, keyArray, Column
 
 End Function
 
 Private Function quick_sort_2dd(inLow, inHi, keyArray, Column, otherArray)
 
-' Usage: quick_sort_2dd(inLow, inHi, keyArray, column, otherArray)
-'
-' "quick_sort_1dd" = quick sort two dimensional double array
-'
-' Sorts "keyArray" and "otherArray" in place between indices inLow and inHi.
-'
-' An array, "otherArray" is sorted in parallel, also in-place. "otherArray" must
-' be one dimensional and have the same start and end indices as the first dimen-
-' sion of "keyArray".
-'
-' "keyArray" must be of type Double, "column" and "otherArray" must be of type
-' long.
-'
-' This function is based on code suggested in:
-' http://stackoverflow.com/questions/152319/vba-array-sort-function
+    ' Usage: quick_sort_2dd(inLow, inHi, keyArray, column, otherArray)
+    '
+    ' "quick_sort_1dd" = quick sort two dimensional double array
+    '
+    ' Sorts "keyArray" and "otherArray" in place between indices inLow and inHi.
+    '
+    ' An array, "otherArray" is sorted in parallel, also in-place. "otherArray" must
+    ' be one dimensional and have the same start and end indices as the first dimen-
+    ' sion of "keyArray".
+    '
+    ' "keyArray" must be of type Double, "column" and "otherArray" must be of type
+    ' long.
+    '
+    ' This function is based on code suggested in:
+    ' http://stackoverflow.com/questions/152319/vba-array-sort-function
 
-Dim pivot As Double
-Dim tmpLow As Long
-Dim tmpHi As Long
-Dim keyTmpSwap As Double
-Dim otherTmpSwap As Long
-Dim keyDims As Long
-Dim otherDims As Long
+    Dim pivot As Double
+    Dim tmpLow As Long
+    Dim tmpHi As Long
+    Dim keyTmpSwap As Double
+    Dim otherTmpSwap As Long
+    Dim keyDims As Long
+    Dim otherDims As Long
 
-tmpLow = inLow
-tmpHi = inHi
-pivot = keyArray((inLow + inHi) \ 2, Column)
+    tmpLow = inLow
+    tmpHi = inHi
+    pivot = keyArray((inLow + inHi) \ 2, Column)
 
-Do While (tmpLow <= tmpHi)
+    Do While (tmpLow <= tmpHi)
 
-    Do While keyArray(tmpLow, Column) < pivot And tmpLow < inHi
-        tmpLow = tmpLow + 1
+        Do While keyArray(tmpLow, Column) < pivot And tmpLow < inHi
+            tmpLow = tmpLow + 1
+        Loop
+        
+        Do While keyArray(tmpHi, Column) > pivot And tmpHi > inLow
+            tmpHi = tmpHi - 1
+        Loop
+        
+        If (tmpLow <= tmpHi) Then
+        
+            keyTmpSwap = keyArray(tmpLow, Column)
+            otherTmpSwap = otherArray(tmpLow)
+            
+            keyArray(tmpLow, Column) = keyArray(tmpHi, Column)
+            otherArray(tmpLow) = otherArray(tmpHi)
+            
+            keyArray(tmpHi, Column) = keyTmpSwap
+            otherArray(tmpHi) = otherTmpSwap
+            
+            tmpLow = tmpLow + 1
+            tmpHi = tmpHi - 1
+            
+        End If
+        
     Loop
-    
-    Do While keyArray(tmpHi, Column) > pivot And tmpHi > inLow
-        tmpHi = tmpHi - 1
-    Loop
-    
-    If (tmpLow <= tmpHi) Then
-    
-        keyTmpSwap = keyArray(tmpLow, Column)
-        otherTmpSwap = otherArray(tmpLow)
-        
-        keyArray(tmpLow, Column) = keyArray(tmpHi, Column)
-        otherArray(tmpLow) = otherArray(tmpHi)
-        
-        keyArray(tmpHi, Column) = keyTmpSwap
-        otherArray(tmpHi) = otherTmpSwap
-        
-        tmpLow = tmpLow + 1
-        tmpHi = tmpHi - 1
-        
-    End If
-    
-Loop
 
-If (inLow < tmpHi) Then quick_sort_2dd inLow, tmpHi, keyArray, Column, otherArray
-If (tmpLow < inHi) Then quick_sort_2dd tmpLow, inHi, keyArray, Column, otherArray
+    If (inLow < tmpHi) Then quick_sort_2dd inLow, tmpHi, keyArray, Column, otherArray
+    If (tmpLow < inHi) Then quick_sort_2dd tmpLow, inHi, keyArray, Column, otherArray
 
 End Function
